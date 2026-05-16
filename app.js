@@ -868,16 +868,21 @@ const App = {
         if (this.state.userProfile && this.dom.userBadge) {
             this.dom.userBadge.classList.remove('hide');
             if (this.dom.userInfoText) {
-                const p = this.state.userProfile;
-                const displayName = String(p.name || '').endsWith('선생님') ? p.name : `${p.name} 선생님`;
-                this.dom.userInfoText.textContent = p.isSpecialist ? `전담 ${displayName}` : `${p.classNum}반 ${displayName}`;
+                if (window._appMode === 'local') {
+                    this.dom.userInfoText.textContent = '로컬 모드';
+                } else {
+                    const p = this.state.userProfile;
+                    const displayName = String(p.name || '').endsWith('선생님') ? p.name : `${p.name} 선생님`;
+                    this.dom.userInfoText.textContent = p.isSpecialist ? `전담 ${displayName}` : `${p.classNum}반 ${displayName}`;
+                }
             }
             const adminBtn = document.getElementById('btn-admin-mode');
-            if (adminBtn) adminBtn.classList.remove('hide');
+            if (adminBtn) adminBtn.classList.toggle('hide', window._appMode === 'local');
         }
     },
     updateNavForRole() {
         const isAdmin = this.state.isAdmin;
+        const isLocalMode = window._appMode === 'local';
         const adminOnlyIds = ['btn-settings', 'btn-validation', 'btn-specialist', 'btn-timetable-all'];
         adminOnlyIds.forEach(id => {
             const el = document.getElementById(id);
@@ -885,21 +890,24 @@ const App = {
         });
         const adminBtn = document.getElementById('btn-admin-mode');
         if (adminBtn) {
-            adminBtn.classList.toggle('active', isAdmin);
+            adminBtn.classList.toggle('active', isAdmin && !isLocalMode);
+            adminBtn.classList.toggle('hide', isLocalMode);
             adminBtn.title = isAdmin ? '관리자 모드 해제' : '관리자 모드';
         }
         if (this.dom.userBadge) {
-            this.dom.userBadge.classList.toggle('user-card-admin', isAdmin);
+            this.dom.userBadge.classList.toggle('user-card-admin', isAdmin && !isLocalMode);
         }
         const colorSection = document.getElementById('color-highlighter-section');
         if (colorSection) colorSection.classList.toggle('hide', !isAdmin);
         const isSpecialist = !!this.state.userProfile?.isSpecialist;
         const spTeacherBtn = document.getElementById('btn-specialist-teacher');
-        if (spTeacherBtn) spTeacherBtn.classList.toggle('hide', !(isAdmin || isSpecialist));
+        if (spTeacherBtn) spTeacherBtn.classList.toggle('hide', isLocalMode || !(isAdmin || isSpecialist));
         const timetableBtn = document.getElementById('btn-timetable');
-        if (timetableBtn) timetableBtn.classList.toggle('hide', isSpecialist && !isAdmin);
+        if (timetableBtn) timetableBtn.classList.toggle('hide', isLocalMode || (isSpecialist && !isAdmin));
         // 모드 전환 시 적절한 메뉴로 이동
-        if (isSpecialist && !isAdmin) {
+        if (isLocalMode) {
+            this.switchMenu('timetable-all');
+        } else if (isSpecialist && !isAdmin) {
             this.switchMenu('specialist-teacher');
         } else if (isAdmin) {
             this.switchMenu('timetable-all');

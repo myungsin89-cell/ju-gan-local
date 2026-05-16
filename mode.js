@@ -230,7 +230,7 @@ window.addEventListener('load', function () {
   const modeBadge = document.getElementById('current-mode-badge');
 
   if (window._appMode === 'local') {
-    if (badge)     badge.classList.remove('hide');
+    if (badge) badge.classList.add('hide');
     if (modeBadge) { modeBadge.textContent = '💻 로컬 모드'; modeBadge.className = 'mode-badge mode-badge-local'; }
   } else if (window._appMode === 'server') {
     if (modeBadge) { modeBadge.textContent = '🌐 서버 모드'; modeBadge.className = 'mode-badge mode-badge-server'; }
