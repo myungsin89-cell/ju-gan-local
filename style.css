@@ -31,7 +31,9 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: var(-
 /* Header */
 .main-header { background-color: var(--bg-color); padding: 0; position: sticky; top: 0; z-index: 100; border-bottom: 1.5px solid rgba(0,0,0,0.03); }
 .header-content { max-width: 1400px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 8px; }
-.logo { font-size: 1.1rem; font-weight: 800; color: var(--primary-color); white-space: nowrap; margin-right: 8px; }
+.brand-block { display: flex; flex-direction: column; gap: 1px; margin-right: 8px; flex-shrink: 0; }
+.logo { font-size: 1.1rem; font-weight: 800; color: var(--primary-color); white-space: nowrap; margin: 0; line-height: 1.15; }
+.brand-credit { font-size: 0.66rem; color: #94a3b8; font-weight: 500; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
 .top-nav { display: flex; gap: 4px; flex: 1; }
 .header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
 .nav-item { padding: 10px 16px; border-radius: 10px; border: none; background: none; color: var(--text-sub); font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; }
